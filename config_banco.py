@@ -1,2 +1,0 @@
-BANCO_DADOS = ""
-COLECAO = ""

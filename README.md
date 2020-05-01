@@ -1,9 +1,8 @@
 # sara_public
-Framework para Análise e coleta de dados de redes sociais utilizando Redes complexas e Mineração de dados. 
+Framework para coleta e Análise de dados de redes sociais utilizando Redes complexas e Mineração de dados.
 
-Framework semi-automatizado,  permite uma coleta e uma análise rapida dos acontecimentos em redes sociais.
+Framework semi-automatizado,  permite uma coleta e uma análise rápida dos acontecimentos em redes sociais.
 
-Devido a grande importância que as redes sociais como Twitter ganharam nos últimos anos uma análise do conteúdo que esta sendo propagado na mesma é essencial.
 
 # Desenvolvimento
 
@@ -18,9 +17,9 @@ O módulo de coleta combina o coletor web e a API de coleta em tempo real do Twi
 
 Módulos associados:
 * saraColetor - Realiza as coletas de tweets em tempo real.
-* saraColetorWeb - Coletor de comentários web, coleta os comentarios presente nos tweets coletados.
+* saraColetorWeb - Realiza a coleta de comentários nos twitter.
 * conexao_twitter - Contém os dados de acesso da API twitter.
-- Os dados são salvos no banco de dados.
+- Os dados são salvos no mongodb, um banco de dados não relacional.
 
 
 ### Geração da Rede
@@ -48,6 +47,9 @@ Esta ferramenta procura encontrar ego comunidades formada em torno de determinad
 
 - Detecção de comunidades - Realiza a detecção de comunidades sobrepostas, utilize o resultado de centralidade ou outro sequencia de importância para detecção de comunidades.
 
+Modulo associado
+> overlap.py
+
 ## Visualização e Análise do conteúdo
 
 A visualização e análise do conteúdo é realizada por meio da utilização da técnica de LDA combinada com uma núvem de palavras.
@@ -60,9 +62,9 @@ Módulos associados:
 
 ## Depêndencias:
 
-Em breve será disponibilizado um arquivo para facilitar a instação das depêndencias.
-- python3.7
-- pymongo.
+Em breve será disponibilizado um arquivo para facilitar a instalação das dependências.
+- python 3.7
+- pymongo
 - mongodb
 - networkx
 - gensim
@@ -72,4 +74,3 @@ Em breve será disponibilizado um arquivo para facilitar a instação das depên
 - nltk
 - seaborn
 - pandas
-
