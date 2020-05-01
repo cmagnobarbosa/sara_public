@@ -2,6 +2,9 @@
 # import codecs
 # import os
 # import sys
+"""
+Modulo de coleta utilizando a api do Twitter .
+"""
 from pymongo import MongoClient
 
 import core.conexao_twitter as conexao
@@ -61,7 +64,7 @@ class Sauron(object):
                 print("Tweets Coletados", contador)
                 contador += 1
                 self.salvar_mongo(i, conexao_banco)
-                if(contador == limite and limite != 0):
+                if contador == limite and limite != 0:
                     print("Coleta encerrada a partir do limite determinado.")
                     return
         except Exception as erro:
@@ -81,11 +84,24 @@ class Sauron(object):
                 print("error", e)
         return lista_ids
 
-    veiculos = ['@uol', '@uolnoticias', '@g1', '@veja',
-                '@brasil247', '@cartacapital', '@exame', '@elpais_brasil',
-                '@bbcbrasil', '@RevistaEpoca',
-                '@folha', '@veja',
-                '@estadao', '@tijolaco', '@o_antagonista', '@agenciabrasil']
+    veiculos = [
+        '@uol',
+        '@uolnoticias',
+        '@g1',
+        '@veja',
+        '@brasil247',
+        '@cartacapital',
+        '@exame',
+        '@elpais_brasil',
+        '@bbcbrasil',
+        '@RevistaEpoca',
+        '@folha',
+        '@veja',
+        '@estadao',
+        '@tijolaco',
+        '@o_antagonista',
+        '@agenciabrasil',
+    ]
 
     checadores_noticias = ['@agencialupa', '@aosfatos', '@agenciapublica']
 

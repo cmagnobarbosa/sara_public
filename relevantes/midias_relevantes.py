@@ -3,6 +3,7 @@ import mongo.mongo_db as bd
 import csv
 import networkx as nx
 import os
+
 """
 Realiza o cálculo das centralidades
 * Calcula retweets, degree, pagerank, betweenness, curtidas 
@@ -10,7 +11,7 @@ Realiza o cálculo das centralidades
 
 path = 'resultados_importancia/'
 
-if(os.path.exists(path) is False):
+if os.path.exists(path) is False:
     os.mkdir(path)
 
 
@@ -18,7 +19,7 @@ def top(lista, numero):
     cont = 1
     for i in lista:
         print(i)
-        if(cont == numero):
+        if cont == numero:
             break
         cont += 1
 
@@ -66,12 +67,14 @@ def consulta_origem(user, tweets):
             numero_retweets = i['retweet_count']
             numero_curtidas = i['favorite_count']
             nome = i['user']['screen_name']
-            if(nome not in user):
+            if nome not in user:
                 user[nome] = [int(numero_retweets), int(numero_curtidas)]
             else:
                 antigo = user[nome]
-                user[nome] = [(antigo[0] + int(numero_retweets)) / 2,
-                              (antigo[1] + int(numero_curtidas)) / 2]
+                user[nome] = [
+                    (antigo[0] + int(numero_retweets)) / 2,
+                    (antigo[1] + int(numero_curtidas)) / 2,
+                ]
         except Exception:
             pass
     return user
@@ -84,12 +87,14 @@ def consulta(user, tweets):
             numero_retweets = i['retweeted_status']['retweet_count']
             numero_curtidas = i['retweeted_status']['favorite_count']
             nome = i['retweeted_status']['user']['screen_name']
-            if(nome not in user):
+            if nome not in user:
                 user[nome] = [int(numero_retweets), int(numero_curtidas)]
             else:
                 antigo = user[nome]
-                user[nome] = [(antigo[0] + int(numero_retweets)) / 2,
-                              (antigo[1] + int(numero_curtidas)) / 2]
+                user[nome] = [
+                    (antigo[0] + int(numero_retweets)) / 2,
+                    (antigo[1] + int(numero_curtidas)) / 2,
+                ]
         except Exception:
             # print(e)
             pass
@@ -124,27 +129,40 @@ def degree(grafo):
     return lista_degree
 
 
-def salvar_csv(nome_rede, lista_betweenness, lista_retweets, lista_curtidas, lista_degree, lista_pagerank):
+def salvar_csv(
+    nome_rede,
+    lista_betweenness,
+    lista_retweets,
+    lista_curtidas,
+    lista_degree,
+    lista_pagerank,
+):
     """Salva um csv"""
-    csvfile = open(path + "lista_relacao_"
-                   + nome_rede + ".csv", "w", newline='')
+    csvfile = open(
+        path + "lista_relacao_" + nome_rede + ".csv", "w", newline=''
+    )
     nome_campos = ['Degree', 'Betweenness', 'Retweets', 'Curtidas', 'PageRank']
     writer = csv.DictWriter(csvfile, fieldnames=nome_campos)
     writer.writeheader()
     for i in range(0, len(lista_betweenness)):
         writer.writerow(
-            {'Degree': lista_degree[i][1],
-             'Betweenness': lista_betweenness[i][1],
-             'Retweets': lista_retweets[i], 'Curtidas': lista_curtidas[i],
-             'PageRank': lista_pagerank[i][1]})
+            {
+                'Degree': lista_degree[i][1],
+                'Betweenness': lista_betweenness[i][1],
+                'Retweets': lista_retweets[i],
+                'Curtidas': lista_curtidas[i],
+                'PageRank': lista_pagerank[i][1],
+            }
+        )
 
     csvfile.close()
 
 
 def imprimir_sementes(sementes, nome_metodo, nome_rede):
     """Imprir sementes"""
-    arq_sementes = open(path + "sementes_"
-                        + nome_metodo + "_" + nome_rede, "w")
+    arq_sementes = open(
+        path + "sementes_" + nome_metodo + "_" + nome_rede, "w"
+    )
     for i in sementes:
         arq_sementes.write(str(i[0]) + "\n")
     arq_sementes.close()
@@ -165,8 +183,11 @@ def main(nome_base, colecao, lista_nos, nome_rede):
     # print("Dados",nome_base,nome_colecao,lista_nos,nome_rede)
     tweets = []
     for nome_no in lista_nos:
-        tweets.append(colecao.find(
-            {"user.screen_name": {"$regex": nome_no, "$options": "i"}}))
+        tweets.append(
+            colecao.find(
+                {"user.screen_name": {"$regex": nome_no, "$options": "i"}}
+            )
+        )
 
     user = {}
     tweets = prepara_tweets(tweets)
@@ -199,7 +220,7 @@ def main(nome_base, colecao, lista_nos, nome_rede):
     imprimir_sementes(lista_degree, "Degree", nome_rede)
     for retweets in retorno:
         for no in lista_nos:
-            if(retweets[0].lower() == no.lower()):
+            if retweets[0].lower() == no.lower():
                 lista_retweets.append(retweets[1])
                 arq_retweets.write(str(no) + "\n")
     arq_retweets.close()
@@ -207,11 +228,22 @@ def main(nome_base, colecao, lista_nos, nome_rede):
     print("Curtidas")
     for curtidas in sorted(lista, key=key_curtidas_dic, reverse=True):
         for no in lista_nos:
-            if(curtidas[0].lower() == no.lower()):
+            if curtidas[0].lower() == no.lower():
                 lista_curtidas.append(float(curtidas[2]))
                 arq_curtidas.write(str(no) + "\n")
-    print(len(lista_curtidas), len(lista_retweets),
-          len(lista_betweenness), len(lista_degree), len(lista_degree))
-    salvar_csv(nome_rede, lista_betweenness,
-               lista_retweets, lista_curtidas, lista_degree, lista_pagerank)
+    print(
+        len(lista_curtidas),
+        len(lista_retweets),
+        len(lista_betweenness),
+        len(lista_degree),
+        len(lista_degree),
+    )
+    salvar_csv(
+        nome_rede,
+        lista_betweenness,
+        lista_retweets,
+        lista_curtidas,
+        lista_degree,
+        lista_pagerank,
+    )
     arq_curtidas.close()

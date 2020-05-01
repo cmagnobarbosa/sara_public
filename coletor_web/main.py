@@ -2,16 +2,16 @@
 Main coletor web.
 * necessita de atualização
 """
-# twitter query
-# https://twitter.com/search?q=previdencia%20from%3Abiakicis%20since%3A2019-02-01%20until%3A2019-02-28&src=typd
 
 import datetime
+
 # p.TweetTextSize.js-tweet-text.tweet-text
 import sys
 import time
 
 import coletor_web.coletor_comentarios as coletor
 from bs4 import BeautifulSoup
+
 # import conexao_twitter as conexao
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -86,7 +86,7 @@ def coletor_global():
             break
         final = days[controle_tempo]
         default = "https://twitter.com/search?l=&q=previdencia%20since%3A"
-        link_term2 = default+f"{day}%20until%3A{final}&src=typd&lang=pt"
+        link_term2 = default + f"{day}%20until%3A{final}&src=typd&lang=pt"
         controle_tempo += 1
         # link_path=f"https://twitter.com/{username}/status/{status_id}"
         driver = webdriver.Chrome(options=options)
@@ -98,15 +98,18 @@ def coletor_global():
         while True:
             try:
                 element2 = driver.find_element_by_css_selector(
-                    "div.stream-footer")
-            except Exception:
-                print("Usuário sem twitter...")
+                    "div.stream-footer"
+                )
+            except Exception as exc:
+                print(f"Usuário sem twitter... {exc}")
                 break
             driver.execute_script(
-                "arguments[0].scrollIntoView(false)", element2)
+                "arguments[0].scrollIntoView(false)", element2
+            )
             time.sleep(2)
             element = driver.find_elements_by_css_selector(
-                "p.TweetTextSize.js-tweet-text.tweet-text")
+                "p.TweetTextSize.js-tweet-text.tweet-text"
+            )
             for i in element:
                 # print(i.get_attribute("innerHTML"))
                 content = i.get_attribute("innerHTML")
@@ -132,13 +135,14 @@ def coletor_global():
 def coletor_especifico(usernames):
     """Coletor especifico."""
     cont_username = 0
-    out = False
     for username in usernames:
-        print(f"Coletando o usuário: {username}"
-              f" Progresso {cont_username}/{len(usernames)}")
+        print(
+            f"Coletando o usuário: {username}"
+            f" Progresso {cont_username}/{len(usernames)}"
+        )
         cont_username += 1
         default = "https//twitter.com/"
-        link_term = default+f"search?l=&q=from%3A{username}&src=typd&lang=pt"
+        link_term = default + f"search?l=&q=from%3A{username}&src=typd&lang=pt"
         # link_term=f"https://twitter.com/search?q=%20from%3A{username}
         # %20since%3A2019-05-08%20until%3A2019-05-08&src=typd"
 
@@ -151,7 +155,8 @@ def coletor_especifico(usernames):
             msg = element.get_attribute("innerHTML")
             soup = BeautifulSoup(msg, "html.parser")
             links = soup.select(
-                "a.tweet-timestamp.js-permalink.js-nav.js-tooltip")
+                "a.tweet-timestamp.js-permalink.js-nav.js-tooltip"
+            )
 
             for link in links:
                 dados = link['href'].split("/")
@@ -166,21 +171,25 @@ def coletor_especifico(usernames):
         while cont < 100:
             try:
                 element2 = driver.find_element_by_css_selector(
-                    "div.stream-footer")
+                    "div.stream-footer"
+                )
             except Exception:
                 # out=True
                 break
             driver.execute_script(
-                "arguments[0].scrollIntoView(false)", element2)
+                "arguments[0].scrollIntoView(false)", element2
+            )
             time.sleep(2)
             cont += 1
         # if(out is True):
         #     out=False
         #     break
         content = driver.execute_script(
-            "return arguments[0].innerHTML;", element)
+            "return arguments[0].innerHTML;", elements
+        )
         elements = driver.find_elements_by_css_selector(
-            "p.TweetTextSize.js-tweet-text.tweet-text")
+            "p.TweetTextSize.js-tweet-text.tweet-text"
+        )
         cont = 0
         print("Tamanho ", len(elements))
         for element in elements:
@@ -190,12 +199,18 @@ def coletor_especifico(usernames):
             msg = mensagem.get_text()
             msg = msg.replace("\n", "")
             try:
-                mensagem_dic = {"status_id": status_list[cont],
-                                "username": username, "msg": msg}
+                mensagem_dic = {
+                    "status_id": status_list[cont],
+                    "username": username,
+                    "msg": msg,
+                }
             except Exception as exc:
                 print(f"error {exc}")
-                mensagem_dic = {"status_id": "",
-                                "username": username, "msg": msg}
+                mensagem_dic = {
+                    "status_id": "",
+                    "username": username,
+                    "msg": msg,
+                }
             save_data("previdencia_lista", mensagem_dic)
             cont += 1
 

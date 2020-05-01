@@ -2,7 +2,7 @@
 from pymongo import MongoClient
 
 
-#import processamento.pre_processamento as pre_processamento
+# import processamento.pre_processamento as pre_processamento
 """
 Realiza a conexao com o MOngoDB
 """
@@ -41,7 +41,7 @@ def carrega_tweet_mongo(nome_base, colecao):
     for tweet in tweets:
         try:
             full_tweet = tweet["extended_tweet"]["full_text"]
-            if(len(full_tweet) > 1):
+            if len(full_tweet) > 1:
                 lista_tweets.append(full_tweet)
         except Exception as e:
             pass

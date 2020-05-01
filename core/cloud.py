@@ -7,6 +7,7 @@ from wordcloud import WordCloud
 
 
 def reorganiza(palavra):
+    """transforma texto"""
     partes = palavra.split("_")
     retorno = "_".join(partes[::-1])
     return retorno
@@ -40,7 +41,8 @@ def gerar_texto(texto, n_repeticoes, lda=False):
 def make_cloud(texto, name):
     """Cria a nuvem de tags"""
     # Generate a word cloud image
-    wordcloud = WordCloud(collocations=False, background_color="white").generate(texto)
+    wordcloud = WordCloud(collocations=False,
+                          background_color="white").generate(texto)
 
     # Display the generated image:
     plt.imshow(wordcloud, interpolation='bilinear')

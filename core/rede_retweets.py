@@ -25,7 +25,7 @@ def main(nome_rede, nome_base, nome_colecao, direcionada, limite_tweets):
     cliente = bd.inicia_conexao()
     colecao = bd.carregar_banco(cliente, nome_base, nome_colecao)
     # grafo não direcionado
-    if("True" in direcionada):
+    if "True" in direcionada:
         print("Gerando uma rede direcionada.")
         grafo = nx.DiGraph()
     else:
@@ -34,7 +34,8 @@ def main(nome_rede, nome_base, nome_colecao, direcionada, limite_tweets):
     # inica a conexao com twitter
     api = conexao.inicia_conexao()
 
-    # utilizado para selecionar o titulo contendo a palavra senado maiusculo e minusculo.
+    # utilizado para selecionar o titulo
+    # contendo a palavra senado maiusculo e minusculo.
     # retorno=colecao.find({"titulo":{"$regex":"senado","$options":"i"}})
     # for i in retorno:
     #     print(i)
@@ -47,7 +48,7 @@ def main(nome_rede, nome_base, nome_colecao, direcionada, limite_tweets):
         exit()
     cont = 0
     for tweet in tweets:
-        #print (tweet['user']['screen_name'])
+        # print (tweet['user']['screen_name'])
         destino = None
         try:
             # print(tweet)
@@ -60,7 +61,7 @@ def main(nome_rede, nome_base, nome_colecao, direcionada, limite_tweets):
             origem = tweet['retweeted_status']['user']['screen_name']
         except Exception as e:
             origem = None
-        if(destino is not None and origem is not None):
+        if destino is not None and origem is not None:
             grafo.add_edge(origem, destino)
     print("------\nGerando a rede com: ", cont, "tweets")
     print("Nome da Rede:", nome_rede)

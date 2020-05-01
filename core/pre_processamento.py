@@ -2,6 +2,7 @@
 # !/usr/bin/env python3
 import ast
 import re
+
 # import base
 import string
 from collections import Counter
@@ -25,8 +26,10 @@ set_adjetivos = stopWords.load_stop_words("adjetivos.txt")
 set_stop = set_stop.union(spacy_stopwords)
 set_stop = set_stop.union(set_adjetivos)
 
+
 def remove_emoji(text):
     return emoji.get_emoji_regexp().sub(u'', text)
+
 
 def to_int_str(data):
     return str(int(data))
@@ -63,14 +66,19 @@ def common_words(tokens):
 
 def formata_data(old_date):
     data = old_date.split("/")
-    new_data = to_int_str(data[1]) + "/" + \
-        to_int_str(data[0]) + "/" + to_int_str(data[2])
+    new_data = (
+        to_int_str(data[1])
+        + "/"
+        + to_int_str(data[0])
+        + "/"
+        + to_int_str(data[2])
+    )
     return new_data
 
 
 def remove_user_mention(text):
     """remove user mention, @username"""
-    if(re.search(r"(@)\S*", text)):
+    if re.search(r"(@)\S*", text):
         text = re.sub(r"(@)\S*", " ", text)
     return text
 
@@ -78,12 +86,12 @@ def remove_user_mention(text):
 def find_link(text):
 
     text = re.sub(r"(pic.twitter)\S*", " ", text)
-    if(re.search(r"(https:)\S*", text)):
-        #print(f"Link found in: {text}")
+    if re.search(r"(https:)\S*", text):
+        # print(f"Link found in: {text}")
         text = re.sub(r"(https:)\S*", " ", text)
         # print("t",text)
         text = text.replace("...", "")
-    elif(re.search(r"(http:)\S*", text)):
+    elif re.search(r"(http:)\S*", text):
         text = re.sub(r"(http:)\S*", " ", text)
     return text
 
@@ -117,6 +125,7 @@ def pre_processing(text):
     # remove stopwords
     tokens_final = [i for i in token_list if not i in set_stop]
     return " ".join(tokens_final)
+
 
 # Processa os textos
 

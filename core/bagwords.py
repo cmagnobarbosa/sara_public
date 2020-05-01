@@ -23,9 +23,10 @@ def carrega_tweet_mongo(nome_base, colecao):
     for tweet in tweets:
         try:
             full_tweet = tweet["extended_tweet"]["full_text"]
-            if(len(full_tweet) > 1):
+            if len(full_tweet) > 1:
                 lista_tweets.append(
-                    pre_processamento.pre_processamento(full_tweet))
+                    pre_processamento.pre_processamento(full_tweet)
+                )
         except Exception as e:
             pass
     return lista_tweets
@@ -63,7 +64,8 @@ def main(banco, colecao):
     doc = 0
     feature_index = tfidf_matrix[doc, :].nonzero()[1]
     tfidf_scores = zip(
-        feature_index, [tfidf_matrix[doc, x] for x in feature_index])
+        feature_index, [tfidf_matrix[doc, x] for x in feature_index]
+    )
 
     final = []
     l_limiar = []
@@ -74,10 +76,10 @@ def main(banco, colecao):
     last = sorted(final, key=getkey, reverse=True)
 
     for i in last:
-        if(float(i[1]) > limiar):
+        if float(i[1]) > limiar:
             retorno = pre_processamento.pre_processamento(i[0])
-            if(len(retorno) > 1):
-                if(float(i[1]) > 0.01):
+            if len(retorno) > 1:
+                if float(i[1]) > 0.01:
                     # print(i,"Cloud:",i)
                     topicos_validos.append(i)
 

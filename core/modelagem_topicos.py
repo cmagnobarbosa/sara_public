@@ -27,7 +27,7 @@ def unpack_tupla(tupla):
 
 def carrega_tweet_mongo(banco, colecao):
     """Carrega e realiza a chamada de limpeza dos tweets"""
-    print(banco,colecao)
+    print(banco, colecao)
     cliente = bd.inicia_conexao()
 
     # nome termo,collection
@@ -38,13 +38,14 @@ def carrega_tweet_mongo(banco, colecao):
         # print(tweet)
         try:
             full_tweet = tweet["extended_tweet"]["full_text"]
-            if(len(full_tweet) > 1):
+            if len(full_tweet) > 1:
                 lista_tweets.append(
-                    pre_processamento.pre_processing(full_tweet))
+                    pre_processamento.pre_processing(full_tweet)
+                )
         except Exception as e:
-            #print("erro",e)
+            # print("erro",e)
             pass
-    #print(len(lista_tweets))
+    # print(len(lista_tweets))
     return lista_tweets
 
 
@@ -82,9 +83,12 @@ def main(banco, colecao, n_topicos):
     # docfinal=doc_stemming
     # ------------------
 
-    # # Creating the term dictionary of our courpus, where every unique term is assigned an index. dictionary = corpora.Dictionary(doc_clean)
+    # Creating the term dictionary of our courpus,
+    # where every unique term is assigned an index.
+    # dictionary = corpora.Dictionary(doc_clean)
     dictionary = corpora.Dictionary(docfinal)
-    # # Converting list of documents (corpus) into Document Term Matrix using dictionary prepared above.
+    # Converting list of documents (corpus) into Document Term Matrix
+    # using dictionary prepared above.
     doc_term_matrix = [dictionary.doc2bow(doc) for doc in docfinal]
 
     # Creating the object for LDA model using gensim library
@@ -102,23 +106,29 @@ def main(banco, colecao, n_topicos):
     # print(topic_prob_extractor(hdp))
 
     # Running and Trainign LDA model on the document term matrix.
-    ldamodel = Lda(corpus=doc_term_matrix,
-                   id2word=dictionary,
-                   num_topics=10,
-                   random_state=1000,
-                   update_every=1,
-                   chunksize=1000,
-                   passes=100,
-                   alpha='auto',
-                   per_word_topics=True)
+    ldamodel = Lda(
+        corpus=doc_term_matrix,
+        id2word=dictionary,
+        num_topics=10,
+        random_state=1000,
+        update_every=1,
+        chunksize=1000,
+        passes=100,
+        alpha='auto',
+        per_word_topics=True,
+    )
 
     topicos = ldamodel.top_topics(
-        corpus=doc_term_matrix, dictionary=dictionary,
-        coherence='u_mass', topn=10, processes=-1)
+        corpus=doc_term_matrix,
+        dictionary=dictionary,
+        coherence='u_mass',
+        topn=10,
+        processes=-1,
+    )
     final = []
-    #print("TOpicos", topicos)
+    # print("TOpicos", topicos)
     for top in topicos:
-        #print(top)
+        # print(top)
         final.append(top[0])
 
     lf = []
@@ -126,6 +136,6 @@ def main(banco, colecao, n_topicos):
         # print("Topicos:",i)
         for k in i:
             lf.append(k)
-    #print(lf)
+    # print(lf)
     cloud.cloud_lda(lf, n_topicos)
     return lf

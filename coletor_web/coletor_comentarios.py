@@ -51,8 +51,9 @@ def get_comments(dados, username, status_id, msg_set):
     # usr=soup.select("spam.username.u-dir.u-textTruncate")
     comments = soup.select("p.TweetTextSize.js-tweet-text.tweet-text")
     for i in comments:
-        msg = str({"usr_source": username,
-                   "status_id": status_id, "comment": i.text})
+        msg = str(
+            {"usr_source": username, "status_id": status_id, "comment": i.text}
+        )
         msg_set.add(msg)
         if msg not in msg_set:
             print("tweet", msg)
@@ -74,7 +75,8 @@ def get_data(username, status_id, nome_arquivo="last_comentarios.txt"):
         time.sleep(2)
         content = driver.page_source
         controle_coletados = get_comments(
-            content, username, status_id, controle_coletados)
+            content, username, status_id, controle_coletados
+        )
         # controla o numero de scrolls na pagina
         print(f"num comentarios coletados:{len(controle_coletados)}")
         if len(controle_coletados) != last:
