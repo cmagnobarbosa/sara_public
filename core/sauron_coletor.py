@@ -1,16 +1,21 @@
 # -*- coding: utf-8 -*-
-# import codecs
-# import os
-# import sys
 """
 Modulo de coleta utilizando a api do Twitter .
 """
+# import codecs
+# import os
+# import sys
+
+import sys
+import time
+
 from pymongo import MongoClient
+from twitter.error import TwitterError
 
-import core.conexao_twitter as conexao
+from credenciais.conexao_twitter import inicia_conexao
 
 
-class Sauron(object):
+class Sauron():
     """docstring for Sauron."""
 
     def __init__(self):
@@ -19,20 +24,24 @@ class Sauron(object):
         self.cliente = MongoClient('localhost', 27017)
 
         # inica a conexao com twitter
-        self.api = conexao.inicia_conexao()
+        self.api = inicia_conexao()
         # caminho = 'central_eleicoes/'
         # configuração do banco de dados MongoDB
         self.pos = ""
         self.collection = ""
+        self.controle_exbicao = 1000
+        self.sleep_on_error = 20
 
     def banco(self, nome_banco, colecao):
+        """configura collection e db"""
         # # configura o local de salvamento no banco.
         banco = self.cliente[nome_banco]
         # coleção ...
         post = banco[colecao]
         return post
 
-    def escreve_lista(self, nome_arquivo, lista):
+    @staticmethod
+    def escreve_lista(nome_arquivo, lista):
         """Escreve no arquivo"""
         arq = open(nome_arquivo, "w")
         for i in lista:
@@ -60,15 +69,22 @@ class Sauron(object):
         print("Coletando dados", "Termo:", termo_pesquisa)
         contador = 0
         try:
-            for i in retorno:
-                print("Tweets Coletados", contador)
+            for tweet in retorno:
+                if exibicao == self.controle_exbicao:
+                    print("Tweets Coletados", contador)
+                    exibicao = 0
                 contador += 1
-                self.salvar_mongo(i, conexao_banco)
+                exibicao += 1
+                self.salvar_mongo(tweet, conexao_banco)
                 if contador == limite and limite != 0:
                     print("Coleta encerrada a partir do limite determinado.")
                     return
-        except Exception as erro:
-            print("error", erro)
+        except TwitterError as exc:
+            print(f"error {exc.message}")
+            if 'Unauthorized' in exc.message.get('message'):
+                print("favor verificar as credencias de acesso.")
+                sys.exit()
+            time.sleep(self.sleep_on_error)
             self.monitor_twitter(termo_pesquisa, conexao_banco, limite)
 
     def obtem_ids(self, lista_nomes):
@@ -79,9 +95,9 @@ class Sauron(object):
                 info = self.api.GetUser(screen_name=name)
                 id = info._json['id']
                 lista_ids.append([name, id])
-            except Exception as e:
+            except Exception as exc:
                 print(name + '\n')
-                print("error", e)
+                print(f"error {exc}")
         return lista_ids
 
     veiculos = [

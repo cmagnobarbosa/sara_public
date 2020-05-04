@@ -1,16 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+Gera a rede de Retweets.
+"""
 import os
 import sys
 
 import networkx as nx
 
-import conexao.conexao_twitter as conexao
-import mongo.mongo_db as bd
+import credenciais.conexao_twitter as conexao_twitter
+import core.database as bd
 
-"""
-Gera a rede de Retweets.
-"""
-#########
-"""Configuração inicial"""
 # 0 define para usar toda a base..
 # limite_tweets=0
 # nome_rede="joaoamoedo_full"
@@ -32,7 +31,7 @@ def main(nome_rede, nome_base, nome_colecao, direcionada, limite_tweets):
         print("Gerando uma rede não direcionada.")
         grafo = nx.Graph()
     # inica a conexao com twitter
-    api = conexao.inicia_conexao()
+    api = conexao_twitter.inicia_conexao()
 
     # utilizado para selecionar o titulo
     # contendo a palavra senado maiusculo e minusculo.
@@ -75,4 +74,13 @@ def main(nome_rede, nome_base, nome_colecao, direcionada, limite_tweets):
     arquivo.write(str(nx.info(grafo)))
     arquivo.close()
     nx.write_gml(grafo, caminho_base + nome_rede + ".gml")
+    grafo_ids=nx.convert_node_labels_to_integers(grafo)
+    # gera traducao de nome para números
+    cont=0
+    with open(caminho_base + "traducao_"+nome_rede,'a+') as arq:
+        for i in grafo:
+            arq.write(i+":"+str(cont)+"\n")
+            cont+=1
+    nx.write_edgelist(grafo_ids,
+                       caminho_base + nome_rede + ".edgelist", data=False)
     # nx.write_gexf(grafo,"retweets2.gexf")

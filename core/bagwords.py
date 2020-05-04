@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 # need this if you want to save tfidf_matr
+# explorar usar tf-id
+"""
+TF-idf
+"""
+
 from scipy.sparse.csr import csr_matrix
 from sklearn.feature_extraction.text import TfidfTransformer, TfidfVectorizer
 
-import Cloud.cloud as cloud
-import mongo.mongo_db as bd
-import processamento.pre_processamento as pre_processamento
-
-
-# explorar usar tf-id
-"""
-Módulo de Análise focado na análise de Distribuição Inversa de Frequência.
-"""
+import core.cloud as cloud
+import core.database as bd
+from core.pre_processamento import pre_processamento
 
 
 def carrega_tweet_mongo(nome_base, colecao):
@@ -25,7 +24,7 @@ def carrega_tweet_mongo(nome_base, colecao):
             full_tweet = tweet["extended_tweet"]["full_text"]
             if len(full_tweet) > 1:
                 lista_tweets.append(
-                    pre_processamento.pre_processamento(full_tweet)
+                    pre_processamento(full_tweet)
                 )
         except Exception as e:
             pass

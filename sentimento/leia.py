@@ -1,8 +1,8 @@
 ''' LeIA - Léxico para Inferência Adaptada
 https://github.com/rafjaa/LeIA
 
-Este projeto é um fork do léxico e ferramenta para análise de 
-sentimentos VADER (Valence Aware Dictionary and sEntiment Reasoner) 
+Este projeto é um fork do léxico e ferramenta para análise de
+sentimentos VADER (Valence Aware Dictionary and sEntiment Reasoner)
 adaptado para textos em português.
 
 Autor do VADER: C.J. Hutto
@@ -30,21 +30,21 @@ REGEX_REMOVE_PUNCTUATION = re.compile('[%s]' % re.escape('!"#$%&\'()*+,-./:;<=>?
 
 PUNC_LIST = [
     ".", "!", "?", ",", ";", ":", "-", "'", "\"", "...",
-    "—", "–", "!?", "?!", "!!", "!!!", "??", "???", "?!?", 
+    "—", "–", "!?", "?!", "!!", "!!!", "??", "???", "?!?",
     "!?!", "?!?!", "!?!?"
 ]
 
 # Negations (Portuguese)
-NEGATE = [t.strip() for t in open('LeIA/lexicons/negate.txt')]
+NEGATE = [t.strip() for t in open('sentimento/lexicons/negate.txt')]
 
 # Booster/dampener 'intensifiers' or 'degree adverbs' (Portuguese)
 boosters = []
-for l in open('LeIA/lexicons/booster.txt'):
+for l in open('sentimento/lexicons/booster.txt'):
     parts = l.strip().split(' ')
     boosters.append([' '.join(parts[:-1]), parts[-1]])
 
 BOOSTER_DICT = {}
-for t, v in boosters: 
+for t, v in boosters:
     BOOSTER_DICT[t] = B_INCR if v == 'INCR' else B_DECR
 
 
@@ -112,7 +112,7 @@ def scalar_inc_dec(word, valence, is_cap_diff):
         scalar = BOOSTER_DICT[word_lower]
         if valence < 0:
             scalar *= -1
-        
+
         # Check if booster/dampener word is in ALLCAPS (while others aren't)
         if word.isupper() and is_cap_diff:
             if valence > 0:
@@ -132,7 +132,7 @@ class SentiText(object):
             text = str(text).encode('utf-8')
         self.text = text
         self.words_and_emoticons = self._words_and_emoticons()
-        
+
         # Doesn't separate words from adjacent
         # punctuation (keeps emoticons & contractions)
         self.is_cap_diff = allcap_differential(self.words_and_emoticons)
@@ -147,13 +147,13 @@ class SentiText(object):
         }
         """
         no_punc_text = REGEX_REMOVE_PUNCTUATION.sub('', self.text)
-        
+
         # Removes punctuation (but loses emoticons & contractions)
         words_only = no_punc_text.split()
-        
+
         # Remove singletons
         words_only = set(w for w in words_only if len(w) > 1)
-        
+
         # The product gives ('cat', ',') and (',', 'cat')
         punc_before = {''.join(p): p[1] for p in product(PUNC_LIST, words_only)}
         punc_after = {''.join(p): p[0] for p in product(words_only, PUNC_LIST)}
@@ -183,7 +183,7 @@ class SentimentIntensityAnalyzer(object):
     Give a sentiment intensity score to sentences.
     """
 
-    def __init__(self, lexicon_file="LeIA/lexicons/vader_lexicon_ptbr.txt", emoji_lexicon="LeIA/lexicons/emoji_utf8_lexicon_ptbr.txt"):
+    def __init__(self, lexicon_file="sentimento/lexicons/vader_lexicon_ptbr.txt", emoji_lexicon="sentimento/lexicons/emoji_utf8_lexicon_ptbr.txt"):
         with open(lexicon_file, encoding='utf-8') as f:
             self.lexicon_full_filepath = f.read()
         self.lexicon = self.make_lex_dict()
@@ -330,29 +330,29 @@ class SentimentIntensityAnalyzer(object):
     def _special_idioms_check(valence, words_and_emoticons, i):
         words_and_emoticons_lower = [str(w).lower() for w in words_and_emoticons]
         onezero = "{0} {1}".format(
-            words_and_emoticons_lower[i - 1], 
+            words_and_emoticons_lower[i - 1],
             words_and_emoticons_lower[i]
         )
 
         twoonezero = "{0} {1} {2}".format(
             words_and_emoticons_lower[i - 2],
-            words_and_emoticons_lower[i - 1], 
+            words_and_emoticons_lower[i - 1],
             words_and_emoticons_lower[i]
         )
 
         twoone = "{0} {1}".format(
-            words_and_emoticons_lower[i - 2], 
+            words_and_emoticons_lower[i - 2],
             words_and_emoticons_lower[i - 1]
         )
 
         threetwoone = "{0} {1} {2}".format(
             words_and_emoticons_lower[i - 3],
-            words_and_emoticons_lower[i - 2], 
+            words_and_emoticons_lower[i - 2],
             words_and_emoticons_lower[i - 1]
         )
 
         threetwo = "{0} {1}".format(
-            words_and_emoticons_lower[i - 3], 
+            words_and_emoticons_lower[i - 3],
             words_and_emoticons_lower[i - 2]
         )
 
@@ -365,7 +365,7 @@ class SentimentIntensityAnalyzer(object):
 
         if len(words_and_emoticons_lower) - 1 > i:
             zeroone = "{0} {1}".format(
-                words_and_emoticons_lower[i], 
+                words_and_emoticons_lower[i],
                 words_and_emoticons_lower[i + 1]
             )
             if zeroone in SPECIAL_CASE_IDIOMS:
@@ -373,7 +373,7 @@ class SentimentIntensityAnalyzer(object):
 
         if len(words_and_emoticons_lower) - 1 > i + 1:
             zeroonetwo = "{0} {1} {2}".format(
-                words_and_emoticons_lower[i], 
+                words_and_emoticons_lower[i],
                 words_and_emoticons_lower[i + 1],
                 words_and_emoticons_lower[i + 2]
                 )

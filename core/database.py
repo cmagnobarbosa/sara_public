@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from pymongo import MongoClient
-
-
-# import processamento.pre_processamento as pre_processamento
 """
 Realiza a conexao com o MOngoDB
 """
+from pymongo import MongoClient
+
+# import processamento.pre_processamento as pre_processamento
 
 
 def inicia_conexao():
@@ -17,8 +16,8 @@ def inicia_conexao():
 
 def carregar_banco(cliente, nome, colecao):
     """Carrega um banco com uma colecao"""
-    db = cliente[nome]
-    return db[colecao]
+    banco = cliente[nome]
+    return banco[colecao]
 
 
 def carregar_usuarios(nome_banco, colecao):
@@ -43,6 +42,7 @@ def carrega_tweet_mongo(nome_base, colecao):
             full_tweet = tweet["extended_tweet"]["full_text"]
             if len(full_tweet) > 1:
                 lista_tweets.append(full_tweet)
-        except Exception as e:
+        # pylint: disable=broad-except
+        except (KeyError, Exception):
             pass
     return lista_tweets

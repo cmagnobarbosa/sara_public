@@ -29,6 +29,9 @@ def main():
         print("True: Rede direcionada, False: Rede não direcionada"
               "\nlimite:0 para utilizar a base completa")
         sys.exit()
+    print(f"Dados digitados\n Nome Grafo:{nome_rede}\n banco:{nome_base}\n"
+          f" Colecao:{nome_colecao}\n Direcionada:{direcionada}\n "
+          f"Limite de tweets:{limite}")
 
     rede.main(nome_rede, nome_base,
               nome_colecao, direcionada, limite)

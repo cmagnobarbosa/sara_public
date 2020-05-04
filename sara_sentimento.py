@@ -53,7 +53,10 @@ class DetectorSentimento():
                                                   'Indice',
                                                   'Sentimento', 'Final'])
 
-        print(data_frame)
+        print("Sentimento\n",data_frame.Sentimento.value_counts())
+        data_frame.Sentimento.value_counts().to_csv("analise_sentimento_resumo"
+                                                    +colecao+".csv")
+        data_frame.to_csv("analise_sentimento"+colecao+".csv",index=False)
 
         fig, axes = plt.subplots(figsize=(7, 7))
         axes = sns.countplot(y="Sentimento", data=data_frame, ax=axes)

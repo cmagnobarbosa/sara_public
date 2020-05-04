@@ -1,14 +1,14 @@
-# sara_public
-Framework para coleta e Análise de dados de redes sociais utilizando Redes complexas e Mineração de dados.
-
-Framework semi-automatizado,  permite uma coleta e uma análise rápida dos acontecimentos em redes sociais.
-
-
-# Desenvolvimento
+# Sara
+Sara é um framework semi-automatizado para coleta e análise de dados de redes sociais utilizando Redes complexas e mineração de dados.
 
 Desenvolvido no Laboratório de Modelagem Computacional e Inteligência Computacional (LABMIC) da Universidade Federal de São João del-Rei(UFSJ)
 
 Estado : Em desenvolvimento
+
+# Como Instalar
+
+- [Guia de Instalacão](Guia.md)
+
 ## Módulos
 
 ### Coletor
@@ -16,8 +16,7 @@ Estado : Em desenvolvimento
 O módulo de coleta combina o coletor web e a API de coleta em tempo real do Twitter.
 
 Módulos associados:
-* saraColetor - Realiza as coletas de tweets em tempo real.
-* saraColetorWeb - Realiza a coleta de comentários nos twitter.
+* sara_coletor - Realiza as coletas de tweets em tempo real.
 * conexao_twitter - Contém os dados de acesso da API twitter.
 - Os dados são salvos no mongodb, um banco de dados não relacional.
 
@@ -26,7 +25,7 @@ Módulos associados:
 
 A geração da rede é realizada por meio do módulo saraEstrutural.
 
-* saraEstrutural - Gera uma rede direcionada ou não direcionada.
+* sara_estrutural - Gera uma rede direcionada ou não direcionada.
 
 A rede gerada é salva no diretório redes.
 
@@ -35,7 +34,7 @@ A rede gerada é salva no diretório redes.
 O framework identifica os vértices de maior importância de acordo com as seguintes métricas de centralidade:
 - Betweenness, PageRank, Degree, Curtidas, Retweets.
 
-A detecção de centralidade é realizada por meio da utilização do módulo saraImportancia.
+A detecção de centralidade é realizada por meio da utilização do módulo sara_centralidade.
 
 O resultado deste módulo é salvo no diretório resultados_importancia
 
@@ -52,17 +51,17 @@ Modulo associado
 
 ## Visualização e Análise do conteúdo
 
-A visualização e análise do conteúdo é realizada por meio da utilização da técnica de LDA combinada com uma núvem de palavras.
+A visualização e análise do conteúdo é realizada por meio da utilização da técnica de LDA combinada com uma nuvem de palavras.
 
 Módulos associados:
 
-* SaraConteudo - Responsável pela geração da núvem de palavras.
-* SaraSentimento - Responsável pela análise de sentimento.
+* Sara_conteudo - Responsável pela geração da núvem de palavras.
+* Sara_sentimento - Responsável pela análise de sentimento.
 
 
 ## Depêndencias:
 
-Em breve será disponibilizado um arquivo para facilitar a instalação das dependências.
+Consulte o guia de instalação.
 - python 3.7
 - pymongo
 - mongodb
@@ -74,3 +73,10 @@ Em breve será disponibilizado um arquivo para facilitar a instalação das depe
 - nltk
 - seaborn
 - pandas
+
+## Artigos associados
+
+Trabalhos relacionados a esta pesquisa publicados em conferencias:
+
+- [Sara - A Semi-Automatic Framework for Social Network Analysis](https://sol.sbc.org.br/index.php/webmedia_estendido/article/view/8137/8012)
+-[A framework for the analysis of information propagation in social networks combining complex networks and text mining techniques full strip](https://dl.acm.org/doi/abs/10.1145/3323503.3360289)

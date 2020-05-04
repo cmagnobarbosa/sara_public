@@ -10,7 +10,7 @@ Coletor API
 import sys
 
 from core.sauron_coletor import Sauron
-
+from core.logger import log
 # padrao_pesquisa,limite,colecao,nome_banco="eleicao"
 # coletor de dados
 
@@ -39,9 +39,8 @@ except IndexError as exc:
 
     sys.exit()
 
-print(f"Termo: {termo} Colecao: {colecao}"
-      f"Número tweets: {n_tweets} Banco: {nome_banco}")
 
+log(termo)
 coletor = Sauron()
 coletor.pesquisa(termo, n_tweets, colecao, nome_banco)
 

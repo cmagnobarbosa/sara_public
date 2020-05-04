@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # !/usr/bin/env python3
-
 """
 Central Estrutural -
 Sara - Sistema de Análise de Dados com Redes Complexas e Analytics
@@ -11,7 +10,7 @@ import sys
 
 import networkx as nx
 
-import relevantes.midias_relevantes as relevante
+import core.centralidade as relevante
 
 
 class Importancia():
@@ -25,8 +24,8 @@ class Importancia():
             self.lista_nos = ""
         except IndexError as exc:
             print(f"ERRO {exc}!!"
-                  "Digite : \n>python3 saraImportancia.py"
-                  " <nome_base> <nome_colecao> <nome_rede>")
+                  "Digite : \n>python3 sara_centralidade.py"
+                  " <nome_base> <nome_colecao> <grafo>")
             sys.exit()
 
     def carrega_grafo(self):

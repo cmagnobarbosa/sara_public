@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-import mongo.mongo_db as bd
 import csv
-import networkx as nx
 import os
+
+import networkx as nx
+
+import core.database as bd
 
 """
 Realiza o cálculo das centralidades
-* Calcula retweets, degree, pagerank, betweenness, curtidas 
+* Calcula retweets, degree, pagerank, betweenness, curtidas
 """
 
 path = 'resultados_importancia/'
@@ -16,6 +18,7 @@ if os.path.exists(path) is False:
 
 
 def top(lista, numero):
+    """exibe o top numero de elementos."""
     cont = 1
     for i in lista:
         print(i)
@@ -35,6 +38,7 @@ def key_curtidas_dic(item):
 
 
 def prepara_tweets(tweets):
+    """adiciona os tweets em uma lista."""
     l_tweets = []
     for cursor in tweets:
         for i in cursor:
@@ -43,6 +47,7 @@ def prepara_tweets(tweets):
 
 
 def get_key(item):
+    """retorna uma chave de um item."""
     return item[1]
 
 
@@ -59,6 +64,7 @@ def analise_betweenness(grafo):
 
 
 def consulta_origem(user, tweets):
+    """consulta o nó de origem"""
     for i in tweets:
         try:
             # print(i)

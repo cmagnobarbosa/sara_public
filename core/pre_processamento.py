@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 # !/usr/bin/env python3
+"""
+Aplica o pré-processamento
+"""
 import ast
 import re
-
 # import base
 import string
 from collections import Counter
@@ -11,10 +13,6 @@ from unicodedata import normalize
 import emoji
 import spacy
 import stopWords.StopWords as stopWords
-
-"""
-Aplica o pré-processamento
-"""
 
 # print('spaCy Version: %s' % (spacy.__version__))
 nlp = spacy.load("pt_core_news_sm")
@@ -28,15 +26,17 @@ set_stop = set_stop.union(set_adjetivos)
 
 
 def remove_emoji(text):
+    """remove emoji de uma string."""
     return emoji.get_emoji_regexp().sub(u'', text)
 
 
 def to_int_str(data):
+    """converte para inteiro."""
     return str(int(data))
 
 
 def tolower(lista):
-    """Lista to lower"""
+    """converte os elementos na lista para minusculo."""
     list_lower = []
     for i in lista:
         list_lower.append(i.lower())
@@ -52,6 +52,7 @@ def save_data(name, data):
 
 
 def remover_acentos(txt):
+    """remove acentuação."""
     return normalize('NFKD', txt).encode('ASCII', 'ignore').decode('ASCII')
 
 
@@ -65,6 +66,7 @@ def common_words(tokens):
 
 
 def formata_data(old_date):
+    """formata data"""
     data = old_date.split("/")
     new_data = (
         to_int_str(data[1])
@@ -84,7 +86,7 @@ def remove_user_mention(text):
 
 
 def find_link(text):
-
+    """remove links"""
     text = re.sub(r"(pic.twitter)\S*", " ", text)
     if re.search(r"(https:)\S*", text):
         # print(f"Link found in: {text}")
@@ -97,6 +99,7 @@ def find_link(text):
 
 
 def pre_processing(text):
+    """Aplica o pré-processamento no texto."""
     # convert text to lowercase
     text = text.lower()
     # find links

@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/env python3
+"""
+LDA
+"""
 import os
 from pprint import pprint
 
@@ -7,7 +10,7 @@ import core.cloud as cloud
 import core.pre_processamento as pre_processamento
 import gensim
 import gensim.corpora as corpora
-import mongo.mongo_db as bd
+import core.database as bd
 import nltk
 from gensim.models import CoherenceModel
 from gensim.utils import simple_preprocess
@@ -20,6 +23,7 @@ def make_bigrams(bigram_mod, texts):
 
 
 def unpack_tupla(tupla):
+    """unpack_tupla"""
     (word1, word2) = tupla
     final = word1 + " " + word2
     return final
